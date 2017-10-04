@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "79226270496",
+    "firebase_url": "https://click-54afc.firebaseio.com",
+    "project_id": "click-54afc",
+    "storage_bucket": "click-54afc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79226270496:android:9204c46193f56e98",
+        "android_client_info": {
+          "package_name": "com.makrand.click"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "79226270496-pj65no74idmmv9p6vuu5vhfmgbl0v0il.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.makrand.click",
+            "certificate_hash": "f76c766a9ddfc0ed973616bffae8db9d61677b0c"
+          }
+        },
+        {
+          "client_id": "79226270496-d0ujje461ggbva9brje4jm22u2ks8dc0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPUOx1lDydH8-z-NjzzG_5Sc7OI8WBZcw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "79226270496-d0ujje461ggbva9brje4jm22u2ks8dc0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
