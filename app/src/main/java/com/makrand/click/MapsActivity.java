@@ -80,7 +80,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         ImageButton left = (ImageButton) findViewById(R.id.left);
         final ImageButton right = (ImageButton) findViewById(R.id.right);
         left.setBackgroundResource(R.drawable.ic_zoom_2);
-        right.setBackgroundResource(R.drawable.ic_menu_18px);
+        right.setBackgroundResource(R.drawable.ic_preferences);
 
         right.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,12 +115,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style);
-        mMap.setMapStyle(style);
+        //MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style);
+        //mMap.setMapStyle(style);
 
         //TODO : check permissions
         try {
             mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
             //mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
         }
         catch (SecurityException se){

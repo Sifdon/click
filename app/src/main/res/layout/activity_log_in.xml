@@ -63,7 +63,7 @@
         android:text="Log In"
         android:layout_marginTop="25dp"
         android:layout_gravity="center_horizontal"
-        android:background="@color/yellow"
+        android:background="@color/primary"
         android:id="@+id/logIn_btn"
         android:textColor="#fff"/>
 </LinearLayout>
@@ -78,12 +78,13 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="20dp"
         >
-    <TextView
-        android:id="@+id/disc"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="Logins are only available for ERV drivers. Please contact makarandbhale123@gmail.com for registration"
-        android:textAlignment="center"
-        />
+
+        <TextView
+            android:id="@+id/disc"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Logins are only available for ERV drivers. Please contact makarandbhale123@gmail.com for registration"
+            android:textAlignment="center"
+            android:visibility="invisible" />
     </LinearLayout>
 </LinearLayout>

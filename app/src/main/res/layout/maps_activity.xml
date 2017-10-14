@@ -1,13 +1,66 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#F8F8F8"
-    >
+    android:background="#F8F8F8">
 <!--<include layout="@layout/toolbar"-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="wrap_content"-->
     <!--/>-->
+
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/toolbar_top"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:minHeight="?attr/actionBarSize"-->
+        <!--android:background="@drawable/translucent"-->
+        <!--app:theme="@style/AppTheme"-->
+        <!--android:gravity="center"-->
+        <!--&gt;-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/main_toolbar_layout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="center"-->
+            <!--android:orientation="vertical">-->
+        <!--<ImageButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="start"-->
+            <!--android:background="@android:color/transparent"-->
+            <!--android:id="@+id/left"-->
+            <!--android:gravity="start"-->
+
+         <!--/>-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Click."-->
+            <!--android:layout_gravity="center"-->
+
+            <!--android:textColor="#844EE6"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textSize="22sp"-->
+            <!--android:padding="10dp"-->
+
+            <!--android:layout_weight="1"-->
+            <!--android:id="@+id/appTitle"-->
+            <!--/>-->
+
+        <!--<ImageButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+
+            <!--android:id="@+id/right"-->
+            <!--android:layout_gravity="end"-->
+            <!--android:background="@android:color/transparent"-->
+
+            <!--/>-->
+        <!--</LinearLayout>-->
+    <!--</android.support.v7.widget.Toolbar>-->
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
