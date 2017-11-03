@@ -35,14 +35,19 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.toolbar);
         checkLogIn();
-        db = FirebaseDatabase.getInstance().getReference("ERV/ambulance/"+auth.getCurrentUser().getUid());
+        try {
+            db = FirebaseDatabase.getInstance().getReference("ERV/ambulance/" + auth.getCurrentUser().getUid());
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG);
+        }
         View view =getSupportActionBar().getCustomView();
         ImageButton left = (ImageButton) findViewById(R.id.left);
         final ImageButton right = (ImageButton) findViewById(R.id.right);

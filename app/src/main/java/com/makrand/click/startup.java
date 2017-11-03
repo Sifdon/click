@@ -22,6 +22,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,43 +43,132 @@ public class startup extends AppCompatActivity {
 
     private ConstraintLayout layout;
     TextView text;
+    Button retry_btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startup);
         ActionBar bar = getSupportActionBar();
         bar.hide();
-
+        // Setting status bar color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.primary));
+        }
         Typeface bold = Typeface.createFromAsset(getAssets(), "fonts/JosefinSans-SemiBold.ttf");
         text = findViewById(R.id.brand_name);
+        retry_btn = findViewById(R.id.retry_btn);
         text.setTypeface(bold);
+        retry_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checker();
+            }
+        });
         if(!called) {
             try {
                 FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             }
             catch (Exception e){
-                Log.d("Excep. for persistance", e.toString());
+                Log.d("Excep. for persistence", e.toString());
             }
             called = true;
         }
-        uniChecker();
+        if(!checker()){
+            retry_btn.setVisibility(View.VISIBLE);
+        }
     }
+    boolean checker(){
+        if(isGooglePlayServicesAvailable(this, startup.this)){
+            if(isLocationServiceEnabled(this)){
 
+                if(isOnline()){
+                    FirebaseAuth auth = FirebaseAuth.getInstance();
+                    if (isLoggedIn(auth)) {
+                        Intent i = new Intent(this, MainActivity.class);
+                        startActivity(i);
+                        finish();
+                    } else {
+                        Intent i = new Intent(this, MapsActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                }
+                else{
+                    final Snackbar snackbar = showSnackbar("No network available", findViewById(android.R.id.content), "Okay", Color.YELLOW);
+                    final Handler handler = new Handler();
+                    final int delay = 1000; //milliseconds
+                    handler.postDelayed(new Runnable(){
+                        public void run(){
+                            if (isOnline()){
+                                snackbar.dismiss();
+                                final Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "You are now online.", Snackbar.LENGTH_LONG);
+                                snackbar.setAction("Okay !", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        snackbar.dismiss();
+                                        FirebaseAuth auth = FirebaseAuth.getInstance();
+                                        if (isLoggedIn(auth)) {
+                                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                            startActivity(i);
+                                            finish();
+                                        } else {
+                                            Intent i = new Intent(getApplicationContext(), MapsActivity.class);
+                                            startActivity(i);
+                                            finish();
+                                        }
+                                    }
+                                });
+                                snackbar.setActionTextColor(Color.YELLOW);
+                                snackbar.show();
+                            }
+                            handler.postDelayed(this, delay);
+                        }
+                    }, delay);
+                    //isLocationServiceEnabled(this);
+                    return false;
+                }
+            }
+            else{
+                final Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Location service is disabled", Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("Enable", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent= new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                    }
+                });
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+                return false;
+            }
+        }
+        else {
+            final Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Google Play Services not available", Snackbar.LENGTH_INDEFINITE);
+            snackbar.show();
+            return false;
+        }
+        return false;
+    }
     void uniChecker(){
 
         if(isGooglePlayServicesAvailable(this, startup.this)){
             FirebaseAuth auth = FirebaseAuth.getInstance();
-
                 if(isLocationServiceEnabled(this)){
-                    if(isLoggedIn(auth)){
-                        Intent i = new Intent(this, MainActivity.class);
-                        startActivity(i);
-                        finish();
+                    if(isOnline()) {
+                        if (isLoggedIn(auth)) {
+                            Intent i = new Intent(this, MainActivity.class);
+                            startActivity(i);
+                            finish();
+                        } else {
+                            Intent i = new Intent(this, MapsActivity.class);
+                            startActivity(i);
+                            finish();
+                        }
                     }
                     else {
-                        Intent i = new Intent(this, MapsActivity.class);
-                        startActivity(i);
-                        finish();
+                        Toast.makeText(getApplicationContext(), "No internet connection available", Toast.LENGTH_LONG).show();
                     }
                 }
                 else {

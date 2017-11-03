@@ -3,65 +3,41 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#F8F8F8">
-<!--<include layout="@layout/toolbar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--/>-->
+    android:background="#F8F8F8"
+    android:gravity="center"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/loader"
+        android:visibility="visible">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spin"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
 
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/toolbar_top"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:minHeight="?attr/actionBarSize"-->
-        <!--android:background="@drawable/translucent"-->
-        <!--app:theme="@style/AppTheme"-->
-        <!--android:gravity="center"-->
-        <!--&gt;-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/body"
+        android:visibility="invisible"
+        >
 
-        <!--<LinearLayout-->
-            <!--android:id="@+id/main_toolbar_layout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:gravity="center"-->
-            <!--android:orientation="vertical">-->
-        <!--<ImageButton-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="start"-->
-            <!--android:background="@android:color/transparent"-->
-            <!--android:id="@+id/left"-->
-            <!--android:gravity="start"-->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/myLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-         <!--/>-->
+            android:layout_gravity="end|bottom"
+            android:clickable="true"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_my_location_24px"
+            app:useCompatPadding="true"/>
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Click."-->
-            <!--android:layout_gravity="center"-->
-
-            <!--android:textColor="#844EE6"-->
-            <!--android:textStyle="bold"-->
-            <!--android:textSize="22sp"-->
-            <!--android:padding="10dp"-->
-
-            <!--android:layout_weight="1"-->
-            <!--android:id="@+id/appTitle"-->
-            <!--/>-->
-
-        <!--<ImageButton-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-
-            <!--android:id="@+id/right"-->
-            <!--android:layout_gravity="end"-->
-            <!--android:background="@android:color/transparent"-->
-
-            <!--/>-->
-        <!--</LinearLayout>-->
-    <!--</android.support.v7.widget.Toolbar>-->
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Click"
@@ -69,4 +45,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.makrand.click.MapsActivity" />
+    </FrameLayout>
+
 </LinearLayout>
