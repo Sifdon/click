@@ -1,22 +1,19 @@
 package com.makrand.click;
 
+import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,21 +23,21 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import java.io.IOException;
-import java.net.InetAddress;
+import java.util.ArrayList;
 
 public class startup extends AppCompatActivity {
     boolean called = false;
-
+    Boolean permissionGranted = false;
+    Boolean paused = false;
     private ConstraintLayout layout;
     TextView text;
     Button retry_btn;
@@ -50,7 +47,7 @@ public class startup extends AppCompatActivity {
         setContentView(R.layout.activity_startup);
         ActionBar bar = getSupportActionBar();
         bar.hide();
-        // Setting status bar color
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -63,7 +60,7 @@ public class startup extends AppCompatActivity {
         retry_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checker();
+                checkServiceAvailable();
             }
         });
         if(!called) {
@@ -75,30 +72,79 @@ public class startup extends AppCompatActivity {
             }
             called = true;
         }
-        if(!checker()){
-            retry_btn.setVisibility(View.VISIBLE);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkPermissionGranted(this);
+        }
+        else{
+            permissionGranted = true;
+            checkServiceAvailable();
         }
     }
-    boolean checker(){
+    void checkPermissionGranted(Context context){
+        if(TedPermission.isGranted(context, Manifest.permission.ACCESS_FINE_LOCATION)){
+            permissionGranted = true;
+            checkServiceAvailable();
+        }
+        else {
+            grantPermissions(this);
+        }
+    }
+    void grantPermissions(final Context context){
+        TedPermission.with(context)
+                .setPermissionListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted() {
+                        permissionGranted = true;
+                    }
+                    @Override
+                    public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                        permissionGranted = false;
+                        final Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Required permissions must be granted", Snackbar.LENGTH_LONG);
+                        snackbar.setAction("Grant", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snackbar.dismiss();
+                                final Intent i = new Intent();
+                                i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                i.addCategory(Intent.CATEGORY_DEFAULT);
+                                i.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                                getApplicationContext().startActivity(i);
+                            }
+                        });
+                        snackbar.setActionTextColor(Color.GREEN);
+                        snackbar.setDuration(Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+                    }
+                })
+                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at Settings > Permission")
+                .setPermissions(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                .check();
+    }
+    boolean checkServiceAvailable(){
         if(isGooglePlayServicesAvailable(this, startup.this)){
             if(isLocationServiceEnabled(this)){
-
                 if(isOnline()){
                     FirebaseAuth auth = FirebaseAuth.getInstance();
-                    if (isLoggedIn(auth)) {
-                        Intent i = new Intent(this, MainActivity.class);
-                        startActivity(i);
-                        finish();
-                    } else {
-                        Intent i = new Intent(this, MapsActivity.class);
-                        startActivity(i);
-                        finish();
+                    if(permissionGranted) {
+                        if (isLoggedIn(auth)) {
+                            Intent i = new Intent(this, MainActivity.class);
+                            startActivity(i);
+                            finish();
+                        } else {
+                            Intent i = new Intent(this, MapsActivity.class);
+                            startActivity(i);
+                            finish();
+                        }
                     }
+
                 }
                 else{
                     final Snackbar snackbar = showSnackbar("No network available", findViewById(android.R.id.content), "Okay", Color.YELLOW);
                     final Handler handler = new Handler();
-                    final int delay = 1000; //milliseconds
+                    final int delay = 2000; //milliseconds
                     handler.postDelayed(new Runnable(){
                         public void run(){
                             if (isOnline()){
@@ -151,62 +197,6 @@ public class startup extends AppCompatActivity {
         }
         return false;
     }
-    void uniChecker(){
-
-        if(isGooglePlayServicesAvailable(this, startup.this)){
-            FirebaseAuth auth = FirebaseAuth.getInstance();
-                if(isLocationServiceEnabled(this)){
-                    if(isOnline()) {
-                        if (isLoggedIn(auth)) {
-                            Intent i = new Intent(this, MainActivity.class);
-                            startActivity(i);
-                            finish();
-                        } else {
-                            Intent i = new Intent(this, MapsActivity.class);
-                            startActivity(i);
-                            finish();
-                        }
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), "No internet connection available", Toast.LENGTH_LONG).show();
-                    }
-                }
-                else {
-                    final Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Location service is disabled", Snackbar.LENGTH_INDEFINITE);
-                    snackbar.setAction("Enable", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent= new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                            startActivity(intent);
-                        }
-                    });
-                    snackbar.setActionTextColor(Color.YELLOW);
-                    snackbar.show();
-                }
-
-            if(!isOnline()) {
-                final Snackbar snackbar = showSnackbar("No network available", findViewById(android.R.id.content), "Okay", Color.YELLOW);
-                final Handler handler = new Handler();
-                final int delay = 1000; //milliseconds
-                handler.postDelayed(new Runnable(){
-                    public void run(){
-                        if (isOnline()){
-                            snackbar.dismiss();
-                            showSnackbar("You are now online", findViewById(android.R.id.content), "Cool !", Color.GREEN);
-                            return;
-                        }
-                        handler.postDelayed(this, delay);
-                    }
-                }, delay);
-                isLocationServiceEnabled(this);
-            }
-        }
-        else{
-            Toast.makeText(getApplicationContext(), "Google Play Services not available", Toast.LENGTH_LONG).show();
-        }
-
-    }
-
     Snackbar showSnackbar(String msg, View view, String btnMsg, int color){
         final Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
         snackbar.setAction(btnMsg, new View.OnClickListener() {
@@ -221,7 +211,34 @@ public class startup extends AppCompatActivity {
     }
     public void onResume(){
         super.onResume();
-        uniChecker();
+        if(paused) {
+            if(TedPermission.isGranted(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)){
+                checkServiceAvailable();
+            } else {
+                final Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Required permissions must be granted", Snackbar.LENGTH_LONG);
+                snackbar.setAction("Grant", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snackbar.dismiss();
+                        final Intent i = new Intent();
+                        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        i.addCategory(Intent.CATEGORY_DEFAULT);
+                        i.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                        getApplicationContext().startActivity(i);
+                    }
+                });
+                snackbar.setActionTextColor(Color.GREEN);
+                snackbar.setDuration(Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+            }
+        }
+    }
+    public void onPause() {
+        super.onPause();
+        paused = true;
     }
     public boolean isGooglePlayServicesAvailable(Context context, Activity activity){
         Dialog errorDialog = null;
@@ -275,18 +292,15 @@ public class startup extends AppCompatActivity {
         try{
             gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         }catch(Exception ex){
-            //do nothing...
+
         }
 
         try{
             network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         }catch(Exception ex){
-            //do nothing...
+
         }
 
         return gps_enabled || network_enabled;
     }
-
-
-
 }

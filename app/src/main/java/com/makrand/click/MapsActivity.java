@@ -1,7 +1,12 @@
 package com.makrand.click;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
@@ -10,8 +15,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.DrawableRes;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -57,11 +65,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import io.nlopez.smartlocation.OnGeofencingTransitionListener;
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
+import io.nlopez.smartlocation.geofencing.model.GeofenceModel;
+import io.nlopez.smartlocation.geofencing.utils.TransitionGeofence;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
-
     private GoogleMap mMap;
     ArrayList<Geofence> mGeofenceList= new ArrayList<>();
     ArrayList<Marker> markers = new ArrayList<>();
@@ -72,6 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     FloatingActionButton myLocation;
     FrameLayout body;
     RelativeLayout loader;
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,8 +275,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Tag i = (Tag) m.getTag();
                             if(model.getId().equals(i.getId())) {
                                 animateMarker(start, start, false, m);
-                                createGeofence(model);
-                                addGeofences();
+                                addSmartGeofence(createSmartGeofence(model.id, model.getLatitude(), model.getLongitude()));
+                                //createGeofence(model);
+                                //addGeofences();
                             }
                         }
                     }
@@ -408,6 +420,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return PendingIntent.getService(this, 0, intent, PendingIntent.
                 FLAG_UPDATE_CURRENT);
     }
+    private GeofenceModel createSmartGeofence(String id, String lat, String lang){
+        return
+                new GeofenceModel.Builder("id_"+id)
+                .setTransition(Geofence.GEOFENCE_TRANSITION_ENTER)
+                .setLatitude(Double.parseDouble(lat))
+                .setLongitude(Double.parseDouble(lang))
+                .setRadius(1000)
+                .build();
+    }
+    private void addSmartGeofence(GeofenceModel geofenceModel){
+        SmartLocation.with(getApplicationContext())
+                .geofencing()
+                .add(geofenceModel)
+                .start(new OnGeofencingTransitionListener() {
+                    @Override
+                    public void onGeofenceTransition(TransitionGeofence transitionGeofence) {
+                        if(transitionGeofence.getTransitionType() == Geofence.GEOFENCE_TRANSITION_ENTER){
+                            showNotification("Zero", "Fucks Given");
+                        }
+                    }
+                });
+    }
     public float calDistance (float lat_a, float lng_a, float lat_b, float lng_b )
     {
         double earthRadius = 3958.75;
@@ -469,6 +503,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+    }
+
+    public void showNotification(String text, String bigText) {
+
+        // 1. Create a NotificationManager
+        NotificationManager notificationManager =
+                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // 2. Create a PendingIntent for AllGeofencesActivity
+        Intent intent = new Intent(this, MapsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // 3. Create and send a notification
+        Notification notification = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(text)
+                .setContentText(bigText)
+                .setContentIntent(pendingNotificationIntent)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(bigText))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
+                .setVibrate(new long[] { 1000, 1000})
+                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                .build();
+
+        notificationManager.notify(0, notification);
     }
 }
 
