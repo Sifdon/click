@@ -5,8 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.makrand.click.MainActivity"
-    android:background="#F0E8FF"
+    android:background="@drawable/gradient_background"
     >
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/main_bar"/>
+
     <!--<ImageButton-->
         <!--android:id="@+id/imageButton"-->
         <!--android:layout_width="75dp"-->
@@ -16,26 +20,35 @@
         <!--android:background="?android:selectableItemBackground"-->
 
         <!--android:src="@drawable/ic_play_arrow_48px" />-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape"
+        android:layout_below="@id/main_bar"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp">
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:scaleType="center"
+            android:id="@+id/start"
+            app:srcCompat="@drawable/ic_play_arrow_24px"
+            app:backgroundTint="#fff"
+            app:fabSize="normal" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:scaleType="center"
-        android:id="@+id/start"
-        android:src="@drawable/ic_play_arrow_48px"
-        app:backgroundTint="#fff"
-        app:fabSize="normal" />
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/start"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="61dp"
+            android:visibility="gone" />
+    </RelativeLayout>
 
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/start"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="61dp"
-        android:visibility="gone"/>
 
 </RelativeLayout>

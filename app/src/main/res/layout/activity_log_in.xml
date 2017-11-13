@@ -63,7 +63,7 @@
         android:text="Log In"
         android:layout_marginTop="25dp"
         android:layout_gravity="center_horizontal"
-        android:background="@color/primary"
+        android:background="@color/primaryLightColor"
         android:id="@+id/logIn_btn"
         android:textColor="#fff"/>
 </LinearLayout>

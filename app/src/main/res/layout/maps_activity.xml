@@ -1,50 +1,87 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#F8F8F8"
+    android:background="@drawable/gradient_background"
     android:gravity="center"
-    >
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/loader"
-        android:visibility="visible">
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spin"
-            android:layout_centerInParent="true"/>
-    </RelativeLayout>
 
-    <FrameLayout
+    >
+
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/toolbar" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/body"
-        android:visibility="invisible"
+        android:background="@drawable/shape"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_below="@+id/topBar"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
         >
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/myLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <RelativeLayout
+            android:id="@+id/loader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
-            android:layout_gravity="end|bottom"
-            android:clickable="true"
-            app:backgroundTint="@color/colorPrimary"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/ic_my_location_24px"
-            app:useCompatPadding="true"/>
+            <ProgressBar
+                android:id="@+id/spin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/Click"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.makrand.click.MapsActivity" />
-    </FrameLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/body"
+            android:visibility="visible"
+            >
 
-</LinearLayout>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/myLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:backgroundTint="#fff"
+                app:elevation="14dp"
+                app:fabSize="mini"
+                app:layout_anchor="@id/cards"
+                app:layout_anchorGravity="bottom|end|right"
+                app:srcCompat="@drawable/ic_my_location_24px" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:visibility="visible"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="12dp">
+
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/Click"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/primaryColor"
+                    tools:context="com.makrand.click.MapsActivity" />
+
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

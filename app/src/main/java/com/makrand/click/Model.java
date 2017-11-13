@@ -6,6 +6,7 @@ package com.makrand.click;
 
 public class Model{
     String latitude, longitude, id;
+    Boolean entered;
     public Model(){}
 
 
@@ -40,5 +41,8 @@ public class Model{
         this.id = id;
     }
 
+    public boolean getEntered(){return entered;}
+
+    public void setEntered(Boolean val){ this.entered = val;}
 
 }

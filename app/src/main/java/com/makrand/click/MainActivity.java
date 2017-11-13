@@ -3,6 +3,7 @@ package com.makrand.click;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
@@ -10,11 +11,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,22 +40,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setCustomView(R.layout.toolbar);
+        Toolbar tb = (Toolbar) findViewById(R.layout.toolbar);
+        setSupportActionBar(tb);
+
         checkLogIn();
         try {
             db = FirebaseDatabase.getInstance().getReference("ERV/ambulance/" + auth.getCurrentUser().getUid());
         }
         catch (Exception e)
         {
-            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG);
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
         }
-        View view =getSupportActionBar().getCustomView();
+
         ImageButton left = (ImageButton) findViewById(R.id.left);
         final ImageButton right = (ImageButton) findViewById(R.id.right);
         final FloatingActionButton start = findViewById(R.id.start);
-        right.setBackgroundResource(R.drawable.ic_menu_18px);
+        TextView title =  findViewById(R.id.appTitle);
+        Typeface bold = Typeface.createFromAsset(getAssets(), "fonts/JosefinSans-SemiBold.ttf");
+        title.setTypeface(bold);
+        right.setBackgroundResource(R.drawable.ic_settings_gear_63);
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!play) {
                     play = true;
 
-                    start.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_pause_48px));
+                    start.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_pause_24px));
                     SmartLocation
                             .with(getApplicationContext())
                             .location()
@@ -111,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else{
                     play = false;
-                    start.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_play_arrow_48px));
+                    start.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_play_arrow_24px));
                     SmartLocation.with(getApplicationContext()).location().stop();
                     db.child(auth.getCurrentUser().getUid()).removeValue();
                 }

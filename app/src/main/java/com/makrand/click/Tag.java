@@ -6,7 +6,7 @@ package com.makrand.click;
 
 public class Tag {
     private String id, name, licence;
-
+    boolean entered;
     Tag() {
     }
 
@@ -14,8 +14,16 @@ public class Tag {
         this.id = id;
         this.name = name;
         this.licence = licence;
+        this.entered = false;
     }
 
+    public void setEntered(boolean val){
+        this.entered= val;
+    }
+
+    public boolean getEntered(){
+        return this.entered;
+    }
     public String getName() {
         return name;
     }

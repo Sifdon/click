@@ -30,8 +30,8 @@ public class logInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-        ActionBar bar = getSupportActionBar();
-        bar.hide();
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(tb);
 
         auth = FirebaseAuth.getInstance();
         title = findViewById(R.id.logIn_title);
