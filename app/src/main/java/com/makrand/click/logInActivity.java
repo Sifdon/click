@@ -39,19 +39,25 @@ public class logInActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         logIn = findViewById(R.id.logIn_btn);
         disc = findViewById(R.id.disc);
-        Typeface semiBold = Typeface.createFromAsset(getAssets(), "fonts/JosefinSans-SemiBold.ttf");
-        Typeface regular = Typeface.createFromAsset(getAssets(), "fonts/JosefinSans-Regular.ttf");
-        title.setTypeface(semiBold);
-        email.setTypeface(regular);
-        password.setTypeface(regular);
-        logIn.setTypeface(regular);
-        disc.setTypeface(regular);
+
         logIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                doLogin(auth, email.getText().toString().trim(), password.getText().toString().trim());
+                if(isEmpty(email) || isEmpty(password)){
+                    Toast.makeText(getApplicationContext(), "Both fields are important", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    doLogin(auth, email.getText().toString().trim(), password.getText().toString().trim());
+                }
             }
         });
+    }
+
+    private boolean isEmpty(EditText etText) {
+        if (etText.getText().toString().trim().length() > 0)
+            return false;
+
+        return true;
     }
     void doLogin(FirebaseAuth auth, String email, String password){
         AlertDialog.Builder builder = new AlertDialog.Builder(logInActivity.this);

@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primaryColor</item>
@@ -8,36 +9,22 @@
         <item name="colorAccent">@color/secondaryColor</item>
 
     </style>
-    <style name="StartUpTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-
-
-    </style>
-    <style name="AppBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorAccent">@color/secondaryColor</item>
-    </style>
-
-    <style name="ToolBarStyle" parent="ToolBarStyle.Base"/>
-
-    <style name="ToolBarStyle.Base" parent="">
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-    </style>
-
-    <style name="ToolBarStyle.Event" parent="ToolBarStyle">
-        <item name="titleTextAppearance">@style/TextAppearance.Widget.Event.Toolbar.Title</item>
-    </style>
-
-    <style name="TextAppearance.Widget.Event.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textStyle">normal</item>
-        <item name="android:textSize">22sp</item>
-    </style>
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="windowActionBar">false</item>
+    <style name="AppTheme.NoActionBar">
         <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:textColorSecondary">#fff</item>
     </style>
+    <style name="CustomPopupTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownVerticalOffset">-8dp</item>
+    </style>
+
+    <!--<style name="Toolbar" parent="ThemeOverlay.AppCompat.Dark">-->
+        <!--<item name="android:windowActionBar">false</item>-->
+        <!--<item name="android:windowNoTitle">true</item>-->
+        <!--<item name="android:textColorSecondary">#fff</item>//color of overflow icon-->
+    <!--</style>-->
+
 </resources>

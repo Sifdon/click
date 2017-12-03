@@ -16,7 +16,9 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.DrawableRes;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -24,6 +26,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -47,6 +51,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.ChildEventListener;
@@ -71,58 +76,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     RelativeLayout body;
     RelativeLayout loader;
     Location currentLocation;
-    View bottomsheet;
+    //private BottomSheetBehavior bottomSheetBehavior;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maps_activity);
         //getting support for action bar aka toolbar
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        setTitle(null);
+        Toolbar tb = (Toolbar) findViewById(R.id.topBar);
         setSupportActionBar(tb);
 
+        // tb.showOverflowMenu();
         body = findViewById(R.id.body);
         loader = findViewById(R.id.loader);
         body.setVisibility(View.INVISIBLE);
         loader.setVisibility(View.VISIBLE);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.Click);
         mapFragment.getMapAsync(this);
+        //bottomSheetBehavior = BottomSheetBehavior.from(bottomsheet);
+
+        //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         TextView title =  findViewById(R.id.appTitle);
         Typeface bold = Typeface.createFromAsset(getAssets(), "fonts/JosefinSans-SemiBold.ttf");
         title.setTypeface(bold);
         ProgressBar spin = findViewById(R.id.spin);
-        bottomsheet = getLayoutInflater().inflate(R.layout.dialog_layout, null);
+
         ImageButton left =  findViewById(R.id.left);
         final ImageButton right = findViewById(R.id.right);
         myLocation = findViewById(R.id.myLocation);
-        left.setBackgroundResource(R.drawable.ic_search_24px);
-        right.setBackgroundResource(R.drawable.ic_settings_gear_63);
+
         spin.setVisibility(View.VISIBLE);
-        right.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PopupMenu menu = new PopupMenu(getApplicationContext(), right);
-                menu.getMenuInflater().inflate(R.menu.map_activity_menu, menu.getMenu());
-                menu.show();
-                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getTitle().toString()){
-                            case "Log In":
-                                Intent i = new Intent(getApplicationContext(), logInActivity.class);
-                                startActivity(i);
-                                break;
-                            case "Settings":
-                                return false;
-                            default:
-                                return false;
-                        }
-                        return false;
-                    }
-                });
-            }
-        });
+
         myLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,27 +161,51 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         runBackgroundCheck();
-        showBottomSheet(this, bottomsheet);
+
     }
 
-    void showBottomSheet(Context context, View view){
-        try {
-            BottomSheetDialog dialog = new BottomSheetDialog(context);
-            dialog.setContentView(view);
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.setCancelable(false);
-        }
-        catch (Exception e){
-            Log.e("Bottomsheet error", e.toString());
-        }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.map_activity_menu, menu);
+        return true;
     }
 
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        return super.onMenuOpened(featureId, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.search:
+                return false;
+            case R.id.register:
+                startActivity(new Intent(getApplicationContext(), logInActivity.class));
+                finish();
+                break;
+            case R.id.settings:
+                return false;
+            case R.id.darkMode:
+                if(item.isChecked()){
+                    item.setChecked(false);
+                    mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style));
+                }
+                else {
+                    item.setChecked(true);
+                    mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_dark_style));
+                }
+        }
+        return true;
+    }
 
     @Override
     public void onResume(){
         super.onResume();
 
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -205,6 +216,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //TODO : check permissions
         try {
             mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMapToolbarEnabled(false);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             SmartLocation.with(getApplicationContext())
                     .location()
@@ -214,7 +226,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         public void onLocationUpdated(Location location) {
                             LatLng latLang = new LatLng(location.getLatitude(), location.getLongitude());
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLang));
-                            mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
+                            mMap.animateCamera( CameraUpdateFactory.zoomTo( 15.0f ) );
                         }
                     });
         }
@@ -223,10 +235,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         body.setVisibility(View.VISIBLE);
         loader.setVisibility(View.GONE);
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
 
+            @Override
+            public View getInfoContents(Marker marker) {
+                View v = getLayoutInflater().inflate(R.layout.info_window, null);
+                TextView name = v.findViewById(R.id.driverName);
+                TextView plate = v.findViewById(R.id.plateNumber);
+
+                Tag i = (Tag) marker.getTag();
+                name.setText(i.getName());
+                plate.setText(i.getLicence());
+
+                return v;
+            }
+        });
+
+    }
+    void changeMapMode(){
     }
     void runBackgroundCheck(){
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("ERV/ambulance/");
+
         db.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -249,6 +283,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         m.remove();
                         markers.remove(m);
                     }
+                    
                 }
             }
 
@@ -292,6 +327,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
+
+
     int setMarker(final Model m){
         if(m.getLatitude() == null || m.getLongitude() == null)
             return  0;
@@ -303,7 +340,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 MarkerOptions options = new MarkerOptions()
                         .position(pos)
                         .title(dataSnapshot.child("name").getValue().toString())
-                        .icon(getBitmapDescriptor(R.drawable.ic_red_circle_alt));
+                        .icon(getBitmapDescriptor(R.drawable.ic_map_marker));
                 Marker marker = mMap.addMarker(options);
                 animateMarker(pos, pos, false, marker);
                 Tag t = new Tag(m.getId(), dataSnapshot.child("name").getValue().toString(), dataSnapshot.child("licence").getValue().toString());

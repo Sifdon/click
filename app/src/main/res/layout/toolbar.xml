@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<android.support.design.widget.AppBarLayout android:id="@+id/appbar_layout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto">-->
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
+
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/toolbar"
 
+    android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     android:background="@android:color/transparent"
-
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    app:popupTheme="@style/CustomPopupTheme"
     android:minHeight="?attr/actionBarSize">
 
     <TextView
@@ -24,34 +18,39 @@
         android:layout_height="wrap_content"
         android:text="Click."
         android:textColor="#fff"
-        android:textSize="24sp"
-        android:textStyle="bold"
-
+        android:textSize="22sp"
+        android:fontFamily="@font/semi_bold"
         />
 
-    <ImageButton
-        android:id="@+id/right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="18dp"
-        android:layout_marginStart="12dp"
-        android:layout_alignParentEnd="true"
-        android:background="@android:color/transparent"
-        android:padding="8dp"
+    <!--<ImageButton-->
+        <!--android:id="@+id/right"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="end"-->
+        <!--android:layout_marginEnd="18dp"-->
+        <!--android:layout_marginStart="12dp"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:background="@android:color/transparent"-->
 
-        />
+        <!--android:visibility="visible"-->
+        <!--android:adjustViewBounds="true"-->
+        <!--android:scaleType="centerInside"-->
 
-    <ImageButton
-        android:id="@+id/left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:background="@android:color/transparent"
-        android:visibility="visible"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:padding="8dp"/>
+        <!--/>-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/left"-->
+        <!--android:layout_width="20dp"-->
+        <!--android:layout_height="20dp"-->
+        <!--android:layout_gravity="end"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:visibility="invisible"-->
+        <!--android:layout_marginStart="12dp"-->
+        <!--android:layout_marginEnd="12dp"-->
+        <!--android:scaleType="centerInside"-->
+        <!--android:adjustViewBounds="true"-->
+
+        <!--/>-->
 
 
 

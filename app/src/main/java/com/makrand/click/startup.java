@@ -52,10 +52,8 @@ public class startup extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.primaryColor));
         }
-        Typeface bold = Typeface.createFromAsset(getAssets(), "fonts/JosefinSans-SemiBold.ttf");
         text = findViewById(R.id.brand_name);
         retry_btn = findViewById(R.id.retry_btn);
-        text.setTypeface(bold);
         retry_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

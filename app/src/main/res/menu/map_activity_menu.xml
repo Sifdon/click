@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <item
+            android:id="@+id/search"
+            android:title="Search"
+            app:showAsAction="always"
+            android:icon="@drawable/ic_search_white_36px"
+            />
         <item
             android:id="@+id/register"
-            android:title="Log In"/>
+            android:title="Log In"
+            app:showAsAction="never"
+            />
 
         <item
             android:id="@+id/settings"
-            android:title="Settings"/>
+            android:title="Settings"
+            app:showAsAction="never"/>
+
+        <item
+            android:id="@+id/darkMode"
+            android:title="Dark Mode"
+            android:orderInCategory="200"
+            app:showAsAction="never"
+            android:visible="true"
+            android:checkable="true"
+            />
 </menu>

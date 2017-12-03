@@ -1,90 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:background="#fff"
-    android:orientation="vertical"
-
     >
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:id="@+id/body">
+    <!--<LinearLayout-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:id="@+id/body">-->
+
+
     <TextView
         android:id="@+id/logIn_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="45dp"
-        android:paddingTop="45dp"
+        android:layout_marginBottom="24dp"
+
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/semi_bold"
         android:text="Click."
-        android:textSize="32sp" />
+        android:textSize="48sp"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="12dp"
-        android:paddingTop="30dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
         app:hintEnabled="false"
-        >
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:id="@+id/email"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logIn_title"
+        app:layout_constraintVertical_chainStyle="spread">
 
-            />
-    </android.support.design.widget.TextInputLayout>
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="12dp"
-        app:hintEnabled="false">
         <EditText
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/regular"
+            android:hint="Email"
+            android:textSize="20sp"
+            android:inputType="textEmailAddress" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        app:hintEnabled="false"
+        app:layout_constraintBottom_toTopOf="@+id/logIn_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/regular"
             android:hint="Password"
             android:inputType="textPassword"
-            android:id="@+id/password"
-            />
+            android:textSize="20sp"/>
     </android.support.design.widget.TextInputLayout>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Log In"
-        android:layout_marginTop="25dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/primaryLightColor"
-        android:id="@+id/logIn_btn"
-        android:textColor="#fff"/>
-</LinearLayout>
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/body"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
-        android:gravity="bottom"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="20dp"
-        >
 
-        <TextView
-            android:id="@+id/disc"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Logins are only available for ERV drivers. Please contact makarandbhale123@gmail.com for registration"
-            android:textAlignment="center"
-            android:visibility="invisible" />
-    </LinearLayout>
-</LinearLayout>
+    <Button
+        android:id="@+id/logIn_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="116dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_button"
+        android:fontFamily="@font/semi_bold"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp"
+        android:text="Log In"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+<!--</LinearLayout>-->
+    <!--<LinearLayout-->
+        <!--android:id="@+id/linearLayout4"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:layout_below="@+id/body"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:gravity="bottom"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--&gt;-->
+
+    <TextView
+        android:id="@+id/disc"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="Logins are only available for ERV drivers. Please contact makarandbhale123@gmail.com for registration"
+        android:textAlignment="center"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+    <!--</LinearLayout>-->
+</android.support.constraint.ConstraintLayout>
