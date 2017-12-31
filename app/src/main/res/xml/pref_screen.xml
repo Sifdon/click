@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+        <PreferenceCategory
+            android:title="First Section">
+
+            <CheckBoxPreference
+                android:key="checkbox_preference"
+                android:title="Test"
+                android:defaultValue="true"/>
+
+            <EditTextPreference
+                android:key="edittext_preference"
+                android:title="Test Edittext"
+                android:summary="Nothing Much"
+                android:dialogTitle="Enter Your Name"
+                android:dependency="checkbox_preference" />
+
+        </PreferenceCategory>
+
+        <PreferenceCategory
+            android:title="@string/title_style_section">
+
+            <ListPreference
+                android:key="list_preference"
+                android:title="Map Style"
+                android:dialogTitle="Select Map Style"
+                android:entries="@array/mapStyleArray"
+                android:entryValues="@array/mapStyleEntryValues" />
+        </PreferenceCategory>
+
+
+</PreferenceScreen>

@@ -183,10 +183,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return false;
             case R.id.register:
                 startActivity(new Intent(getApplicationContext(), logInActivity.class));
-                finish();
                 break;
             case R.id.settings:
-                return false;
+                //startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                break;
             case R.id.darkMode:
                 if(item.isChecked()){
                     item.setChecked(false);
@@ -196,6 +196,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     item.setChecked(true);
                     mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_dark_style));
                 }
+                break;
         }
         return true;
     }
@@ -209,11 +210,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        //mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        //MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style);
-        //mMap.setMapStyle(style);
 
-        //TODO : check permissions
         try {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMapToolbarEnabled(false);
@@ -225,8 +222,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         @Override
                         public void onLocationUpdated(Location location) {
                             LatLng latLang = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLang));
-                            mMap.animateCamera( CameraUpdateFactory.zoomTo( 15.0f ) );
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLang, 15));
                         }
                     });
         }
@@ -450,5 +446,3 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         notificationManager.notify(0, notification);
     }
 }
-
-//TODO : Check google play services
